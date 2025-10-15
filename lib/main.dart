@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
     PredictionsScreen(), // Predictive maintenance - new
    RealTimeTrafficScreen(), // Existing traffic monitoring
     SatelliteScreen(), // Existing satellite imagery
-    IncidentsScreen(), // Existing incidents
+  RealIncidentsScreen(), // Existing incidents
     AirQualityScreen(), // Existing air quality
   ];
 

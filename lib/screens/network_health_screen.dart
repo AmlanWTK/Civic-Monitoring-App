@@ -1,4 +1,6 @@
 import 'package:civic_app_4/models/models.dart';
+import 'package:civic_app_4/widgets/chart_widget.dart';
+import 'package:civic_app_4/widgets/metric_card.dart';
 import 'package:civic_app_4/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
