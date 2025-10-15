@@ -211,7 +211,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
             foregroundColor: Colors.black87,
             elevation: 1,
             shadowColor: Colors.grey[300],
-            title: Text('SMS Complaints', style: GoogleFonts.playfairDisplay(color: Colors.black87,fontWeight: FontWeight.bold)),
+            title: Text('SMS Complaints', style: GoogleFonts.playfairDisplay(color: Colors.blueGrey,fontWeight: FontWeight.bold)),
             actions: [
               IconButton(
                 icon: Icon(Icons.refresh, color: Colors.black87),

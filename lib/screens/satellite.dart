@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 
 class SatelliteScreen extends StatefulWidget {
@@ -107,7 +108,7 @@ class _SatelliteScreenState extends State<SatelliteScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Satellite Imagery'),
+        title: Text('Satellite Imagery',style: GoogleFonts.playfairDisplaySc(fontWeight: FontWeight.bold,fontSize: 25, color: Colors.blueGrey),),
         elevation: 0,
         bottom: TabBar(
           controller: _tabController,

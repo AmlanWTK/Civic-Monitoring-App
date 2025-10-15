@@ -91,7 +91,7 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
             foregroundColor: Colors.black87,
             elevation: 1,
             shadowColor: Colors.grey[300],
-            title: Text('Network Health', style: GoogleFonts.playfairDisplay(color: Colors.grey[900], fontWeight: FontWeight.bold,fontSize: 25)),
+            title: Text('Network Health', style: GoogleFonts.playfairDisplay(color: Colors.blueGrey, fontWeight: FontWeight.bold,fontSize: 25)),
             bottom:
              TabBar(
               controller: _tabController,

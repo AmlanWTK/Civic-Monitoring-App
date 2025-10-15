@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_map/flutter_map.dart';
@@ -263,7 +264,7 @@ class _IncidentsScreenState extends State<IncidentsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Disaster Incidents'),
+        title: Text('Disaster Incidents',style: GoogleFonts.playfairDisplay(fontWeight: FontWeight.bold,color: Colors.blueGrey, fontSize: 25),),
         elevation: 0,
         bottom: TabBar(
           controller: _tabController,
@@ -784,13 +785,15 @@ class _IncidentsScreenState extends State<IncidentsScreen>
                     children: [
                       Text(
                         'Incident Analytics',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        style: GoogleFonts.playfairDisplay(
+                          color: Colors.blueGrey,
                           fontWeight: FontWeight.bold,
+                          fontSize: 25
                         ),
                       ),
                       Text(
                         'Disaster monitoring and analysis',
-                        style: TextStyle(color: Colors.grey[400]),
+                        style: TextStyle(color: Colors.grey[700]),
                       ),
                     ],
                   ),
@@ -828,9 +831,11 @@ class _IncidentsScreenState extends State<IncidentsScreen>
       children: [
         Text(
           'Severity Distribution',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: GoogleFonts.playfairDisplay(
+                          color: Colors.blueGrey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20
+                        ),
         ),
         SizedBox(height: 12),
         GridView.count(
@@ -864,9 +869,11 @@ class _IncidentsScreenState extends State<IncidentsScreen>
       children: [
         Text(
           'Incident Types',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+         style: GoogleFonts.playfairDisplay(
+                          color: Colors.blueGrey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25
+                        ),
         ),
         SizedBox(height: 12),
         ...typeStats.entries.map((entry) {

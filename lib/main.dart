@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
     NetworkHealthScreen(), // Network monitoring - new
     ComplaintsScreen(), // SMS complaints - new  
     PredictionsScreen(), // Predictive maintenance - new
-    TrafficScreen(), // Existing traffic monitoring
+   RealTimeTrafficScreen(), // Existing traffic monitoring
     SatelliteScreen(), // Existing satellite imagery
     IncidentsScreen(), // Existing incidents
     AirQualityScreen(), // Existing air quality
@@ -195,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 8),
                   Text(
                     'Infrastructure Monitor',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    style: GoogleFonts.playfairDisplay(color: Colors.white, fontSize: 23,fontWeight: FontWeight.bold),
                   ),
                   Text(
                     'Telecom & Civic Services',
@@ -214,22 +214,8 @@ class _HomePageState extends State<HomePage> {
             _buildDrawerItem(6, Icons.report, 'Incidents'),
             _buildDrawerItem(7, Icons.cloud, 'Air Quality'),
             Divider(color: Colors.grey[300]),
-            ListTile(
-              leading: Icon(Icons.settings, color: Colors.grey[700]),
-              title: Text('Settings', style: TextStyle(color: Colors.black87)),
-              onTap: () {
-                Navigator.pop(context);
-                // Navigate to settings
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.help, color: Colors.grey[700]),
-              title: Text('Help & Support', style: TextStyle(color: Colors.black87)),
-              onTap: () {
-                Navigator.pop(context);
-                // Navigate to help
-              },
-            ),
+           
+           
           ],
         ),
       ),
@@ -245,8 +231,8 @@ class _HomePageState extends State<HomePage> {
       ),
       title: Text(
         title,
-        style: TextStyle(
-          color: isSelected ? Colors.blue[600] : Colors.black87,
+        style: GoogleFonts.playfairDisplay(
+          color: isSelected ? Colors.blue[700] : Colors.black87,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
         ),
       ),

@@ -28,7 +28,7 @@ class _PredictionsScreenState extends State<PredictionsScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this); // Changed from 3 to 2
     _loadPredictiveData();
     _startPeriodicRefresh();
   }
@@ -151,7 +151,7 @@ class _PredictionsScreenState extends State<PredictionsScreen>
             foregroundColor: Colors.black87,
             elevation: 1,
             shadowColor: Colors.grey[300],
-            title: Text('Predictive Maintenance', style: GoogleFonts.playfairDisplay(color: Colors.black87, fontWeight: FontWeight.bold)),
+            title: Text('Predictive Maintenance', style: GoogleFonts.playfairDisplay(color: Colors.blueGrey, fontWeight: FontWeight.bold)),
             bottom: TabBar(
               controller: _tabController,
               labelColor: Colors.blue[600],
@@ -160,7 +160,7 @@ class _PredictionsScreenState extends State<PredictionsScreen>
               tabs: [
                 Tab(icon: Icon(Icons.warning), text: 'Alerts'),
                 Tab(icon: Icon(Icons.build), text: 'Maintenance'),
-                Tab(icon: Icon(Icons.analytics), text: 'Trends'),
+                // Removed the Trends tab
               ],
             ),
             actions: [
@@ -179,7 +179,7 @@ class _PredictionsScreenState extends State<PredictionsScreen>
                       children: [
                         _buildAlertsTab(),
                         _buildMaintenanceTab(),
-                        _buildTrendsTab(),
+                        // Removed _buildTrendsTab()
                       ],
                     ),
         ),
@@ -355,11 +355,7 @@ class _PredictionsScreenState extends State<PredictionsScreen>
           ),
         ),
         Spacer(),
-        TextButton.icon(
-          onPressed: _showFilterDialog,
-          icon: Icon(Icons.filter_list, color: Colors.blue[600]),
-          label: Text('Filter', style: TextStyle(color: Colors.blue[600])),
-        ),
+        
       ],
     );
   }
@@ -699,245 +695,6 @@ class _PredictionsScreenState extends State<PredictionsScreen>
     );
   }
 
-  Widget _buildTrendsTab() {
-    return Container(
-      color: Colors.grey[50],
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTrendsSummary(),
-            SizedBox(height: 20),
-            _buildNetworkTrends(),
-            SizedBox(height: 20),
-            _buildPredictiveInsights(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTrendsSummary() {
-    return Card(
-      color: Colors.white,
-      shadowColor: Colors.grey[300],
-      elevation: 2,
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Network Trends Analysis',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            SizedBox(height: 16),
-            if (_trendAnalysis.containsKey('overallHealth')) ...[
-              _buildTrendMetric(
-                'Overall Health Score',
-                '${_trendAnalysis['overallHealth']['currentScore']?.toInt() ?? 0}/100',
-                _trendAnalysis['overallHealth']['riskLevel'] ?? 'unknown',
-              ),
-              _buildTrendMetric(
-                'Predicted Health (7 days)',
-                '${_trendAnalysis['overallHealth']['predictedScore']?.toInt() ?? 0}/100',
-                'forecast',
-              ),
-            ] else ...[
-              Text('Trend analysis data not available', style: TextStyle(color: Colors.grey[600])),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTrendMetric(String label, String value, String status) {
-    Color statusColor = _getTrendColor(status);
-    
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(label, style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black87)),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Text(
-              value,
-              style: TextStyle(
-                color: statusColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNetworkTrends() {
-    return Card(
-      color: Colors.white,
-      shadowColor: Colors.grey[300],
-      elevation: 2,
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Tower Performance Trends',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            SizedBox(height: 16),
-            if (_trendAnalysis.isNotEmpty) ...[
-              ..._trendAnalysis.entries
-                  .where((entry) => entry.key != 'overallHealth')
-                  .map((entry) => _buildTowerTrendCard(entry.key, entry.value))
-                  .toList(),
-            ] else ...[
-              Text('No trend data available', style: TextStyle(color: Colors.grey[600])),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTowerTrendCard(String towerId, dynamic trendData) {
-    if (trendData is! Map) return SizedBox();
-    
-    String direction = trendData['direction'] ?? 'stable';
-    Color directionColor = _getTrendDirectionColor(direction);
-    
-    return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: directionColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: directionColor.withOpacity(0.3)),
-      ),
-      child: Row(
-        children: [
-          Icon(_getTrendIcon(direction), color: directionColor),
-          SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Tower $towerId',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
-                ),
-                Text(
-                  'Trend: ${direction.toUpperCase()}',
-                  style: TextStyle(fontSize: 12, color: directionColor),
-                ),
-              ],
-            ),
-          ),
-          Text(
-            '${trendData['avgSignalStrength']?.toInt() ?? 0}%',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: directionColor,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPredictiveInsights() {
-    return Card(
-      color: Colors.white,
-      shadowColor: Colors.grey[300],
-      elevation: 2,
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Predictive Insights',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            SizedBox(height: 16),
-            _buildInsightCard(
-              'Network Capacity',
-              'Current utilization trending upward. Consider capacity expansion for BD-001 within 60 days.',
-              Icons.trending_up,
-              Colors.orange,
-            ),
-            _buildInsightCard(
-              'Equipment Lifecycle',
-              'BD-004 power systems approaching replacement threshold. Schedule maintenance within 2 weeks.',
-              Icons.battery_alert,
-              Colors.red,
-            ),
-            _buildInsightCard(
-              'Performance Optimization',
-              'Network-wide latency improvements possible through configuration optimization.',
-              Icons.speed,
-              Colors.blue,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInsightCard(String title, String description, IconData icon, Color color) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.3)),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: color),
-          SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  description,
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   // Helper methods
   Widget _buildSeverityChip(String severity) {
     Color color = _getSeverityColor(severity);
@@ -986,25 +743,6 @@ class _PredictionsScreenState extends State<PredictionsScreen>
     return Colors.green;
   }
 
-  Color _getTrendColor(String status) {
-    switch (status) {
-      case 'high': return Colors.red;
-      case 'medium': return Colors.orange;
-      case 'low': return Colors.green;
-      case 'forecast': return Colors.blue;
-      default: return Colors.grey;
-    }
-  }
-
-  Color _getTrendDirectionColor(String direction) {
-    switch (direction) {
-      case 'improving': return Colors.green;
-      case 'degrading': return Colors.red;
-      case 'stable': return Colors.blue;
-      default: return Colors.grey;
-    }
-  }
-
   IconData _getAlertIcon(String alertType) {
     switch (alertType) {
       case 'NETWORK_DEGRADATION': return Icons.signal_wifi_bad;
@@ -1021,15 +759,6 @@ class _PredictionsScreenState extends State<PredictionsScreen>
       case 'CORRECTIVE': return Icons.build;
       case 'UPGRADE': return Icons.upgrade;
       default: return Icons.settings;
-    }
-  }
-
-  IconData _getTrendIcon(String direction) {
-    switch (direction) {
-      case 'improving': return Icons.trending_up;
-      case 'degrading': return Icons.trending_down;
-      case 'stable': return Icons.trending_flat;
-      default: return Icons.help;
     }
   }
 
@@ -1151,23 +880,6 @@ class _PredictionsScreenState extends State<PredictionsScreen>
             ),
           ),
           Expanded(child: Text(value, style: TextStyle(color: Colors.black87))),
-        ],
-      ),
-    );
-  }
-
-  void _showFilterDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text('Filter Alerts', style: TextStyle(color: Colors.black87)),
-        content: Text('Filter options would be implemented here', style: TextStyle(color: Colors.black87)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Close'),
-          ),
         ],
       ),
     );
