@@ -2,8 +2,6 @@
 
 <div align="center">
 
-![Civic Infrastructure Monitoring App](https://user-gen-media-assets.s3.amazonaws.com/seedream_images/2fa090e7-3be4-4a69-877b-73f661b4bd2c.png)
-
 [![Flutter](https://img.shields.io/badge/Flutter-3.0+-02569B.svg?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.0+-0175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
@@ -11,7 +9,7 @@
 
 **A comprehensive real-time monitoring solution for civic infrastructure management, featuring ML-powered predictive analytics, live traffic monitoring, disaster incident tracking, and air quality analysis.**
 
-[📱 Features](#-features) • [📸 Screenshots](#-app-screenshots) • [🛠️ Tech Stack](#️-technology-stack) • [⚡ Quick Start](#-quick-start) • [📡 APIs](#-data-sources--apis)
+[📱 Features](#-key-features) • [📸 Screenshots](#-app-screenshots) • [🛠️ Tech Stack](#️-technology-stack) • [⚡ Quick Start](#-quick-start) • [📡 APIs](#-data-sources--apis)
 
 </div>
 
@@ -27,12 +25,6 @@ Empowering cities with intelligent monitoring tools to enhance public safety, op
 ---
 
 ## 🚀 Key Features
-
-<div align="center">
-
-![App Features](https://user-gen-media-assets.s3.amazonaws.com/seedream_images/1628b167-56c2-4d1e-8b5b-94c084ff2cb6.png)
-
-</div>
 
 ### 🤖 **ML-Powered Predictive Maintenance**
 - **Real Machine Learning** algorithms using logistic regression
@@ -117,7 +109,6 @@ Empowering cities with intelligent monitoring tools to enhance public safety, op
 ### 🚨 Disaster Incident Tracking
 
 <p float="left">
-  <img src="screenshots/10.jpg" width="250" />
   <img src="screenshots/11.jpg" width="250" />
   <img src="screenshots/12.jpg" width="250" />
 </p>
@@ -126,7 +117,7 @@ Empowering cities with intelligent monitoring tools to enhance public safety, op
 
 ---
 
-### 🌬️ Air Quality & Analytics
+### 🌬️ Air Quality & Environmental Monitoring
 
 <p float="left">
   <img src="screenshots/13.jpg" width="250" />
@@ -138,7 +129,7 @@ Empowering cities with intelligent monitoring tools to enhance public safety, op
 
 ---
 
-### 📊 Advanced Analytics & Reports
+### 📊 Advanced Analytics & Detailed Reports
 
 <p float="left">
   <img src="screenshots/16.jpg" width="250" />
@@ -152,12 +143,6 @@ Empowering cities with intelligent monitoring tools to enhance public safety, op
 ---
 
 ## 🛠️ Technology Stack
-
-<div align="center">
-
-![Technology Stack](https://user-gen-media-assets.s3.amazonaws.com/seedream_images/f2302f53-1548-4bcf-a88c-f75c974d80f1.png)
-
-</div>
 
 | Category | Technologies |
 |----------|-------------|
@@ -531,32 +516,7 @@ copies or substantial portions of the Software.
 
 ---
 
-## 📊 Project Statistics
-
 <div align="center">
-
-![GitHub stars](https://img.shields.io/github/stars/yourusername/civic-infrastructure-monitoring?style=social)
-![GitHub forks](https://img.shields.io/github/forks/yourusername/civic-infrastructure-monitoring?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/yourusername/civic-infrastructure-monitoring?style=social)
-
-![GitHub repo size](https://img.shields.io/github/repo-size/yourusername/civic-infrastructure-monitoring)
-![GitHub language count](https://img.shields.io/github/languages/count/yourusername/civic-infrastructure-monitoring)
-![GitHub top language](https://img.shields.io/github/languages/top/yourusername/civic-infrastructure-monitoring)
-![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/civic-infrastructure-monitoring)
-![GitHub issues](https://img.shields.io/github/issues/yourusername/civic-infrastructure-monitoring)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/yourusername/civic-infrastructure-monitoring)
-
-</div>
-
----
-
-<div align="center">
-
-### 🌟 Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/civic-infrastructure-monitoring&type=Date)](https://star-history.com/#yourusername/civic-infrastructure-monitoring&Date)
-
----
 
 **🏛️ Building Smarter Cities Through Intelligent Infrastructure Monitoring**
 
@@ -569,16 +529,8 @@ copies or substantial portions of the Software.
 
 ---
 
-### 📱 Download & Try It Out
-
-[![Download APK](https://img.shields.io/badge/Download-APK-success?style=for-the-badge&logo=android)](https://github.com/yourusername/civic-infrastructure-monitoring/releases)
-[![View on Play Store](https://img.shields.io/badge/Google_Play-Coming_Soon-lightgrey?style=for-the-badge&logo=google-play)](https://play.google.com)
-[![View on App Store](https://img.shields.io/badge/App_Store-Coming_Soon-lightgrey?style=for-the-badge&logo=apple)](https://apps.apple.com)
-
----
-
 *© 2025 Civic Infrastructure Monitoring Project. All rights reserved.*
 
-**Version 1.0.0** | **Last Updated: October 2025** | **Maintained by: [Your Name](https://github.com/yourusername)**
+**Version 1.0.0** | **Last Updated: October 2025**
 
 </div>
