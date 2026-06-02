@@ -1,6 +1,4 @@
-
-
-// Alert Widget for notifications and alerts
+import 'package:civic_app_4/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -28,51 +26,91 @@ class AlertWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dismissible(
       key: Key(title + time),
-      direction: onDismiss != null 
-          ? DismissDirection.endToStart 
+      direction: onDismiss != null
+          ? DismissDirection.endToStart
           : DismissDirection.none,
-      onDismissed: (direction) {
-        if (onDismiss != null) onDismiss!();
-      },
+      onDismissed: (_) => onDismiss?.call(),
       background: Container(
         alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 20),
-        color: Colors.red,
-        child: Icon(Icons.delete, color: Colors.white),
+        padding: const EdgeInsets.only(right: 20),
+        decoration: BoxDecoration(
+          color: AppColors.error.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Icon(Icons.delete_outline_rounded, color: AppColors.error),
       ),
-      child: ListTile(
+      child: GestureDetector(
         onTap: onTap,
-        leading: CircleAvatar(
-          backgroundColor: color.withOpacity(0.2),
-          child: Icon(icon, color: color, size: 20),
-        ),
-        title: Text(
-          title,
-          style: GoogleFonts.playfairDisplay(fontWeight: FontWeight.w600, color: Colors.black,),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 4),
-            Text(
-              message,
-              style: GoogleFonts.roboto(fontSize: 13,color: Colors.grey[700]),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.06),
+            borderRadius: BorderRadius.circular(12),
+            border: Border(
+              left: BorderSide(color: color, width: 3),
+              top: BorderSide(color: color.withOpacity(0.15), width: 1),
+              right: BorderSide(color: color.withOpacity(0.15), width: 1),
+              bottom: BorderSide(color: color.withOpacity(0.15), width: 1),
             ),
-            SizedBox(height: 4),
-            Text(
-              time,
-              style: TextStyle(
-                fontSize: 11,
-                color: Colors.grey[500],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(icon, color: color, size: 18),
               ),
-            ),
-          ],
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          time,
+                          style: GoogleFonts.inter(
+                              fontSize: 10, color: AppColors.textMuted),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      message,
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: AppColors.textSecondary,
+                        height: 1.4,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              if (onTap != null) ...[
+                const SizedBox(width: 8),
+                const Icon(Icons.chevron_right_rounded,
+                    size: 16, color: AppColors.textMuted),
+              ],
+            ],
+          ),
         ),
-        trailing: onTap != null 
-            ? Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey)
-            : null,
       ),
     );
   }

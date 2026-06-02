@@ -2,6 +2,7 @@
 // Line Chart Painter
 import 'package:civic_app_4/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import '../theme.dart';
 
 class LineChartPainter extends CustomPainter {
   final List<ChartData> data;

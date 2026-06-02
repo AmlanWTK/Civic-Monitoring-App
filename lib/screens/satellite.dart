@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
@@ -108,7 +109,7 @@ class _SatelliteScreenState extends State<SatelliteScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Satellite Imagery',style: GoogleFonts.playfairDisplaySc(fontWeight: FontWeight.bold,fontSize: 25, color: Colors.blueGrey),),
+        title: Text('Satellite Imagery',style: GoogleFonts.inter(fontWeight: FontWeight.bold,fontSize: 25, color: AppColors.textPrimary),),
         elevation: 0,
         bottom: TabBar(
           controller: _tabController,
@@ -180,7 +181,7 @@ class _SatelliteScreenState extends State<SatelliteScreen>
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.3),
+                                  color: AppColors.textPrimary.withOpacity(0.3),
                                   blurRadius: 4,
                                   offset: Offset(0, 2),
                                 ),

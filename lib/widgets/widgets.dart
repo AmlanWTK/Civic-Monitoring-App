@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
@@ -28,7 +29,7 @@ class ProgressBar extends StatelessWidget {
         if (label != null) ...[
           Text(
             label!,
-            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+            style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
           ),
           SizedBox(height: 4),
         ],

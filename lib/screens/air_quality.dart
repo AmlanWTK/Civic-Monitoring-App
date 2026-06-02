@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -312,8 +313,8 @@ class _AirQualityScreenState extends State<AirQualityScreen>
       appBar: AppBar(
         title: Text(
           'Air Quality Monitoring',
-          style: GoogleFonts.playfairDisplay(
-            color: Colors.blueGrey,
+          style: GoogleFonts.inter(
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
             fontSize: 20
           ),
@@ -393,7 +394,7 @@ class _AirQualityScreenState extends State<AirQualityScreen>
         color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.textPrimary.withOpacity(0.1),
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -792,8 +793,8 @@ class _AirQualityScreenState extends State<AirQualityScreen>
                     children: [
                       Text(
                         'Air Quality Analytics',
-                        style: GoogleFonts.playfairDisplay(
-                          color: Colors.blueGrey,
+                        style: GoogleFonts.inter(
+                          color: AppColors.textPrimary,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -842,10 +843,10 @@ class _AirQualityScreenState extends State<AirQualityScreen>
       children: [
         Text(
           'Division Analysis',
-          style: GoogleFonts.playfairDisplay(
+          style: GoogleFonts.inter(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.blueGrey
+            color: AppColors.textPrimary
           ),
         ),
         SizedBox(height: 12),
@@ -969,10 +970,10 @@ class _AirQualityScreenState extends State<AirQualityScreen>
       children: [
         Text(
           'Parameter Summary',
-          style: GoogleFonts.playfairDisplay(
+          style: GoogleFonts.inter(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.blueGrey
+            color: AppColors.textPrimary
           ),
         ),
         SizedBox(height: 12),
@@ -1060,9 +1061,9 @@ class _AirQualityScreenState extends State<AirQualityScreen>
       children: [
         Text(
           'Top Cities by Measurements',
-          style: GoogleFonts.playfairDisplay(
+          style: GoogleFonts.inter(
             fontSize: 20,
-            color: Colors.blueGrey,
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -1116,7 +1117,7 @@ class _AirQualityScreenState extends State<AirQualityScreen>
           children: [
             Text(
               'Health Recommendations',
-              style: GoogleFonts.playfairDisplay(
+              style: GoogleFonts.inter(
                 fontWeight: FontWeight.bold,
                 fontSize: 20
               ),
@@ -1150,7 +1151,7 @@ class _AirQualityScreenState extends State<AirQualityScreen>
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.playfairDisplay(fontWeight: FontWeight.bold),
+                  style: GoogleFonts.inter(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
                 Text(
@@ -1174,8 +1175,8 @@ class _AirQualityScreenState extends State<AirQualityScreen>
           SizedBox(height: 16),
           Text(
             'No Air Quality Data',
-            style: GoogleFonts.playfairDisplay(
-              color: Colors.blueGrey,
+            style: GoogleFonts.inter(
+              color: AppColors.textPrimary,
               fontWeight: FontWeight.bold,
               fontSize: 20
             ),
@@ -1374,7 +1375,7 @@ class _AirQualityScreenState extends State<AirQualityScreen>
                   Expanded(
                     child: Text(
                       '${measurement['parameter']?.toString().toUpperCase() ?? ''} Measurement',
-                      style: GoogleFonts.playfairDisplay(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.blueGrey),
+                      style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 25, color: AppColors.textPrimary),
                     ),
                   ),
                   IconButton(
@@ -1421,7 +1422,7 @@ class _AirQualityScreenState extends State<AirQualityScreen>
             width: 120,
             child: Text(
               '$label:',
-              style: GoogleFonts.playfairDisplay(fontWeight: FontWeight.bold),
+              style: GoogleFonts.inter(fontWeight: FontWeight.bold),
             ),
           ),
           Expanded(child: Text(value)),

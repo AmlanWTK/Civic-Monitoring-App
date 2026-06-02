@@ -1,4 +1,5 @@
 import 'package:civic_app_4/models/models.dart';
+import 'package:civic_app_4/theme.dart';
 import 'package:civic_app_4/widgets/chart_widget.dart';
 import 'package:civic_app_4/widgets/metric_card.dart';
 import 'package:civic_app_4/widgets/widgets.dart';
@@ -62,113 +63,81 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-    scaffoldBackgroundColor: Colors.grey.shade50,
-    cardColor: Colors.white,
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.white,
-      foregroundColor: Colors.black87,
-      elevation: 1,
-      shadowColor: Colors.grey.shade300,
-    ),
-    tabBarTheme: TabBarThemeData(
-      labelColor: Colors.blue.shade600,
-      unselectedLabelColor: Colors.grey.shade600,
-      indicatorColor: Colors.blue.shade600,
-    ),
-    cardTheme: CardThemeData(
-      color: Colors.white,
-      shadowColor: Colors.grey.shade300,
-      elevation: 2,
-    ),
-  ),
-
-      child: Container(
-        color: Colors.grey[50],
-        child: Scaffold(
-          backgroundColor: Colors.grey[50],
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black87,
-            elevation: 1,
-            shadowColor: Colors.grey[300],
-            title: Text('Network Health', style: GoogleFonts.playfairDisplay(color: Colors.blueGrey, fontWeight: FontWeight.bold,fontSize: 25)),
-            bottom:
-             TabBar(
-              controller: _tabController,
-              labelColor: Colors.blue[600],
-              unselectedLabelColor: Colors.grey[600],
-              indicatorColor: Colors.blue[600],
-              tabs: [
-                Tab(icon: Icon(Icons.dashboard), text: 'Overview',),
-                Tab(icon: Icon(Icons.network_check), text: 'QoS Metrics'),
-                Tab(icon: Icon(Icons.analytics), text: 'Analytics'),
-              ],
-            ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.refresh, color: Colors.black87),
-                onPressed: _loadNetworkData,
-              ),
-            ],
-          ),
-          body: _loading
-              ? Center(child: CircularProgressIndicator())
-              : _error != null
-                  ? _buildErrorWidget()
-                  : TabBarView(
-                      controller: _tabController,
-                      children: [
-                        _buildOverviewTab(),
-                        _buildQoSTab(),
-                        _buildAnalyticsTab(),
-                      ],
-                    ),
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        title: Text('Network Health',
+            style: GoogleFonts.inter(
+                color: AppColors.textPrimary, fontWeight: FontWeight.w700)),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(icon: Icon(Icons.dashboard_rounded), text: 'Overview'),
+            Tab(icon: Icon(Icons.network_check_rounded), text: 'QoS Metrics'),
+            Tab(icon: Icon(Icons.analytics_rounded), text: 'Analytics'),
+          ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh_rounded),
+            onPressed: _loadNetworkData,
+          ),
+        ],
       ),
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : _error != null
+              ? _buildErrorWidget()
+              : TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildOverviewTab(),
+                    _buildQoSTab(),
+                    _buildAnalyticsTab(),
+                  ],
+                ),
     );
   }
 
   Widget _buildErrorWidget() {
-    return Container(
-      color: Colors.grey[50],
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error, size: 64, color: Colors.red),
-            SizedBox(height: 16),
-            Text('Error loading network data', style: TextStyle(color: Colors.black87)),
-            Text(_error ?? 'Unknown error', style: TextStyle(color: Colors.black87)),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _loadNetworkData,
-              child: Text('Retry'),
-            ),
-          ],
-        ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.error_rounded, size: 64, color: AppColors.error),
+          const SizedBox(height: 16),
+          Text('Error loading network data',
+              style: GoogleFonts.inter(color: AppColors.textPrimary, fontSize: 16)),
+          const SizedBox(height: 8),
+          Text(_error ?? 'Unknown error',
+              style: GoogleFonts.inter(color: AppColors.textSecondary, fontSize: 12)),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: _loadNetworkData,
+            child: const Text('Retry'),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildOverviewTab() {
-    return Container(
-      color: Colors.grey[50],
-      child: RefreshIndicator(
-        onRefresh: _loadNetworkData,
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildNetworkSummary(),
-              SizedBox(height: 20),
-              _buildTowerGrid(),
-              SizedBox(height: 20),
-              _buildRealtimeMetrics(),
-            ],
-          ),
+    return RefreshIndicator(
+      color: AppColors.primary,
+      backgroundColor: AppColors.card,
+      onRefresh: _loadNetworkData,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildNetworkSummary(),
+            const SizedBox(height: 20),
+            _buildTowerGrid(),
+            const SizedBox(height: 20),
+            _buildRealtimeMetrics(),
+            const SizedBox(height: 16),
+          ],
         ),
       ),
     );
@@ -179,88 +148,83 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
     int healthyTowers = _networkMetrics.where((n) => n.status == 'healthy').length;
     int warningTowers = _networkMetrics.where((n) => n.status == 'warning').length;
     int criticalTowers = _networkMetrics.where((n) => n.status == 'critical').length;
-    
-    double avgSignalStrength = totalTowers > 0 
+
+    double avgSignalStrength = totalTowers > 0
         ? _networkMetrics.map((n) => n.signalStrength).reduce((a, b) => a + b) / totalTowers
         : 0;
 
-    return Card(
-      color: Colors.white,
-      shadowColor: Colors.grey[300],
-      elevation: 2,
-      child: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.network_check, size: 32, color: Colors.blueAccent),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Network Overview',
-                        style: GoogleFonts.playfairDisplay(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      Text(
-                        'Real-time telecom infrastructure monitoring',
-                        style: GoogleFonts.roboto(color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: _getOverallHealthColor().withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Text(
-                    'Health: ${avgSignalStrength.toInt()}%',
-                    style: GoogleFonts.playfairDisplay(
-                      color: _getOverallHealthColor(),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildSummaryCard('Total Towers', '$totalTowers', Icons.cell_tower, Colors.blue),
-                ),
-                SizedBox(width: 12),
-                Expanded(
-                  child: _buildSummaryCard('Healthy', '$healthyTowers', Icons.check_circle, Colors.green),
-                ),
-                SizedBox(width: 12),
-                Expanded(
-                  child: _buildSummaryCard('Warning', '$warningTowers', Icons.warning, Colors.orange),
-                ),
-                SizedBox(width: 12),
-                Expanded(
-                  child: _buildSummaryCard('Critical', '$criticalTowers', Icons.error, Colors.red),
-                ),
-              ],
-            ),
-          ],
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF1A2550), Color(0xFF0E1A38)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  gradient: AppColors.gradientPrimary,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(Icons.network_check_rounded,
+                    color: Colors.white, size: 22),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Network Overview',
+                        style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: AppColors.textPrimary)),
+                    Text('Real-time telecom infrastructure monitoring',
+                        style: GoogleFonts.inter(
+                            color: AppColors.textSecondary, fontSize: 12)),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: AppDecorations.statusBadge(_getOverallHealthColor()),
+                child: Text('Health: ${avgSignalStrength.toInt()}%',
+                    style: GoogleFonts.inter(
+                        color: _getOverallHealthColor(),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(child: _buildSummaryCard('Total', '$totalTowers', Icons.cell_tower_rounded, AppColors.primary)),
+              const SizedBox(width: 10),
+              Expanded(child: _buildSummaryCard('Healthy', '$healthyTowers', Icons.check_circle_rounded, AppColors.success)),
+              const SizedBox(width: 10),
+              Expanded(child: _buildSummaryCard('Warning', '$warningTowers', Icons.warning_rounded, AppColors.warning)),
+              const SizedBox(width: 10),
+              Expanded(child: _buildSummaryCard('Critical', '$criticalTowers', Icons.error_rounded, AppColors.error)),
+            ],
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildSummaryCard(String label, String value, IconData icon, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
       decoration: BoxDecoration(
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
@@ -268,24 +232,19 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
       ),
       child: Column(
         children: [
-          Icon(icon, color: color, size: 24),
-          SizedBox(height: 8),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-          Text(
-            label,
-            style: GoogleFonts.playfairDisplay(
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-              color: color.withOpacity(0.8),
-            ),
-          ),
+          Icon(icon, color: color, size: 22),
+          const SizedBox(height: 6),
+          Text(value,
+              style: GoogleFonts.inter(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: color)),
+          Text(label,
+              style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 11,
+                  color: color.withOpacity(0.8)),
+              textAlign: TextAlign.center),
         ],
       ),
     );
@@ -295,28 +254,24 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Tower Status',
-          style: GoogleFonts.playfairDisplay(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        SizedBox(height: 12),
+        Text('Tower Status',
+            style: GoogleFonts.inter(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary)),
+        const SizedBox(height: 12),
         GridView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
             childAspectRatio: 1.1,
           ),
           itemCount: _networkMetrics.length,
-          itemBuilder: (context, index) {
-            return _buildTowerCard(_networkMetrics[index]);
-          },
+          itemBuilder: (context, index) =>
+              _buildTowerCard(_networkMetrics[index]),
         ),
       ],
     );
@@ -324,74 +279,59 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
 
   Widget _buildTowerCard(NetworkMetrics tower) {
     Color statusColor = _getStatusColor(tower.status);
-    
-    return Card(
-      color: Colors.white,
-      shadowColor: Colors.grey[300],
-      elevation: 2,
+    return Container(
+      decoration: AppDecorations.glowCard(statusColor),
       child: InkWell(
         onTap: () => _showTowerDetails(tower),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: statusColor.withOpacity(0.2),
+                      color: statusColor.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: statusColor.withOpacity(0.3)),
                     ),
-                    child: Icon(
-                      Icons.cell_tower,
-                      color: statusColor,
-                      size: 20,
-                    ),
+                    child: Icon(Icons.cell_tower_rounded,
+                        color: statusColor, size: 20),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Container(
-                    width: 12,
-                    height: 12,
+                    width: 10,
+                    height: 10,
                     decoration: BoxDecoration(
-                      color: statusColor,
-                      shape: BoxShape.circle,
-                    ),
+                        color: statusColor, shape: BoxShape.circle),
                   ),
                 ],
               ),
-              SizedBox(height: 12),
-              Text(
-                tower.towerId,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.black87,
-                ),
-              ),
-              Text(
-                tower.location,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 12,
-                ),
-              ),
-              SizedBox(height: 8),
+              const SizedBox(height: 12),
+              Text(tower.towerId,
+                  style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                      color: AppColors.textPrimary)),
+              Text(tower.location,
+                  style: GoogleFonts.inter(
+                      color: AppColors.textSecondary, fontSize: 11)),
+              const SizedBox(height: 8),
               Row(
                 children: [
-                  Icon(Icons.signal_cellular_alt, size: 14, color: Colors.grey[600]),
-                  SizedBox(width: 4),
-                  Text(
-                    '${tower.signalStrength}%',
-                    style: TextStyle(fontSize: 12, color: Colors.black87),
-                  ),
-                  Spacer(),
-                  Text(
-                    '${tower.latency.toInt()}ms',
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                  ),
+                  Icon(Icons.signal_cellular_alt_rounded,
+                      size: 13, color: AppColors.textMuted),
+                  const SizedBox(width: 4),
+                  Text('${tower.signalStrength}%',
+                      style: GoogleFonts.inter(
+                          fontSize: 12, color: AppColors.textSecondary)),
+                  const Spacer(),
+                  Text('${tower.latency.toInt()}ms',
+                      style: GoogleFonts.inter(
+                          fontSize: 12, color: AppColors.textMuted)),
                 ],
               ),
             ],
@@ -402,24 +342,20 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
   }
 
   Widget _buildRealtimeMetrics() {
-    if (_qosMetrics.isEmpty) return SizedBox();
-
+    if (_qosMetrics.isEmpty) return const SizedBox();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Real-time Metrics',
-          style: GoogleFonts.playfairDisplay(
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-            fontSize: 25
-          ),
-        ),
-        SizedBox(height: 12),
+        Text('Real-time Metrics',
+            style: GoogleFonts.inter(
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary,
+                fontSize: 16)),
+        const SizedBox(height: 12),
         GridView.count(
           crossAxisCount: 2,
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           mainAxisSpacing: 12,
           crossAxisSpacing: 12,
           childAspectRatio: 1.0,
@@ -427,29 +363,29 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
             MetricCard(
               title: 'Avg Latency',
               value: '${_calculateAverageLatency().toInt()}ms',
-              icon: Icons.speed,
+              icon: Icons.speed_rounded,
               color: _getLatencyColor(_calculateAverageLatency()),
               subtitle: 'Network Response',
             ),
             MetricCard(
               title: 'Packet Loss',
               value: '${_calculateAveragePacketLoss().toStringAsFixed(1)}%',
-              icon: Icons.warning,
+              icon: Icons.warning_rounded,
               color: _getPacketLossColor(_calculateAveragePacketLoss()),
               subtitle: 'Data Integrity',
             ),
             MetricCard(
               title: 'Total Users',
               value: '${_calculateTotalUsers()}',
-              icon: Icons.people,
-              color: Colors.blue,
+              icon: Icons.people_rounded,
+              color: AppColors.primary,
               subtitle: 'Connected Devices',
             ),
             MetricCard(
               title: 'Avg Uptime',
               value: '${_calculateAverageUptime().toStringAsFixed(1)}%',
-              icon: Icons.timer,
-              color: Colors.green,
+              icon: Icons.timer_rounded,
+              color: AppColors.success,
               subtitle: 'Service Availability',
             ),
           ],
@@ -460,33 +396,27 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
 
   Widget _buildQoSTab() {
     if (_qosMetrics.isEmpty) {
-      return Container(
-        color: Colors.grey[50],
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.network_check, size: 64, color: Colors.grey),
-              SizedBox(height: 16),
-              Text('No QoS data available', style: TextStyle(color: Colors.black87)),
-            ],
-          ),
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.network_check_rounded, size: 64, color: AppColors.textMuted),
+            const SizedBox(height: 16),
+            Text('No QoS data available',
+                style: GoogleFonts.inter(color: AppColors.textSecondary)),
+          ],
         ),
       );
     }
-
-    return Container(
-      color: Colors.grey[50],
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildQoSOverview(),
-            SizedBox(height: 20),
-            _buildQoSMetricsList(),
-          ],
-        ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildQoSOverview(),
+          const SizedBox(height: 20),
+          _buildQoSMetricsList(),
+        ],
       ),
     );
   }
@@ -497,8 +427,8 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
         : 0;
 
     return Card(
-      color: Colors.white,
-      shadowColor: Colors.grey[300],
+      color: AppColors.card,
+      shadowColor: AppColors.border,
       elevation: 2,
       child: Padding(
         padding: EdgeInsets.all(20),
@@ -507,10 +437,10 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
           children: [
             Text(
               'Quality of Service Overview',
-              style: GoogleFonts.playfairDisplay(
+              style: GoogleFonts.inter(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
-                color: Colors.blueGrey,
+                color: AppColors.textPrimary,
               ),
             ),
             SizedBox(height: 16),
@@ -549,7 +479,7 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
                   child: CircularProgressIndicator(
                     value: avgQualityScore / 100,
                     strokeWidth: 8,
-                    backgroundColor: Colors.grey[300],
+                    backgroundColor: AppColors.border,
                     valueColor: AlwaysStoppedAnimation(_getQualityScoreColor(avgQualityScore)),
                   ),
                 ),
@@ -567,10 +497,10 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
       children: [
         Text(
           'Tower QoS Metrics',
-          style: GoogleFonts.playfairDisplay(
+          style: GoogleFonts.inter(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.blueGrey,
+            color: AppColors.textPrimary,
           ),
         ),
         SizedBox(height: 12),
@@ -588,8 +518,8 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
 
   Widget _buildQoSCard(QoSMetrics qos) {
     return Card(
-      color: Colors.white,
-      shadowColor: Colors.grey[300],
+      color: AppColors.card,
+      shadowColor: AppColors.border,
       elevation: 2,
       margin: EdgeInsets.only(bottom: 12),
       child: ExpansionTile(
@@ -604,11 +534,11 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
             color: _getQualityScoreColor(qos.qualityScore),
           ),
         ),
-        title: Text('Tower ${qos.towerId}', style: GoogleFonts.playfairDisplay(color: Colors.black)),
-        subtitle: Text('Quality: ${qos.qualityGrade} (${qos.qualityScore.toInt()}/100)', style: TextStyle(color: Colors.grey[600])),
+        title: Text('Tower ${qos.towerId}', style: GoogleFonts.inter(color: AppColors.textPrimary)),
+        subtitle: Text('Quality: ${qos.qualityGrade} (${qos.qualityScore.toInt()}/100)', style: TextStyle(color: AppColors.textSecondary)),
         children: [
           Container(
-            color: Colors.white,
+            color: AppColors.surface,
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Column(
@@ -634,14 +564,14 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
       padding: EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: Colors.grey[600]),
+          Icon(icon, size: 16, color: AppColors.textSecondary),
           SizedBox(width: 8),
           Expanded(
-            child: Text(label, style: TextStyle(fontSize: 14, color: Colors.black87)),
+            child: Text(label, style: TextStyle(fontSize: 14, color: AppColors.textPrimary)),
           ),
           Text(
             value,
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+            style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
           ),
         ],
       ),
@@ -649,20 +579,18 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
   }
 
   Widget _buildAnalyticsTab() {
-    return Container(
-      color: Colors.grey[50],
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildPerformanceTrends(),
-            SizedBox(height: 20),
-            _buildNetworkUtilization(),
-            SizedBox(height: 20),
-            _buildPredictiveAnalytics(),
-          ],
-        ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildPerformanceTrends(),
+          const SizedBox(height: 20),
+          _buildNetworkUtilization(),
+          const SizedBox(height: 20),
+          _buildPredictiveAnalytics(),
+          const SizedBox(height: 16),
+        ],
       ),
     );
   }
@@ -699,8 +627,8 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
 
   Widget _buildPredictiveAnalytics() {
     return Card(
-      color: Colors.white,
-      shadowColor: Colors.grey[300],
+      color: AppColors.card,
+      shadowColor: AppColors.border,
       elevation: 2,
       child: Padding(
         padding: EdgeInsets.all(16),
@@ -709,9 +637,9 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
           children: [
             Text(
               'Predictive Analytics',
-              style: GoogleFonts.playfairDisplay(
+              style: GoogleFonts.inter(
                 fontWeight: FontWeight.bold,
-                color: Colors.blueGrey,
+                color: AppColors.textPrimary,
                 fontSize: 20
               ),
             ),
@@ -762,11 +690,11 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.playfairDisplay(fontWeight: FontWeight.bold, color: Colors.black87),
+                  style: GoogleFonts.inter(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
                 ),
                 Text(
                   description,
-                  style: GoogleFonts.roboto(fontSize: 12, color: Colors.grey[600]),
+                  style: GoogleFonts.roboto(fontSize: 12, color: AppColors.textSecondary),
                 ),
               ],
             ),
@@ -861,13 +789,13 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       builder: (context) => DraggableScrollableSheet(
         initialChildSize: 0.7,
         maxChildSize: 0.9,
         minChildSize: 0.5,
         builder: (context, scrollController) => Container(
-          color: Colors.white,
+          color: AppColors.surface,
           padding: EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -879,12 +807,12 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
                   Expanded(
                     child: Text(
                       'Tower ${tower.towerId}',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.black87),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.textPrimary),
                     ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: Icon(Icons.close, color: Colors.black87),
+                    icon: Icon(Icons.close, color: AppColors.textPrimary),
                   ),
                 ],
               ),
@@ -905,7 +833,7 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
                       _buildDetailRow('Uptime', '${tower.uptime.toStringAsFixed(2)}%'),
                       _buildDetailRow('Coordinates', '${tower.latitude}, ${tower.longitude}'),
                       SizedBox(height: 16),
-                      Text('Additional Metrics:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
+                      Text('Additional Metrics:', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                       ...tower.additionalMetrics.entries.map((entry) =>
                         _buildDetailRow(entry.key, entry.value.toString())
                       ).toList(),
@@ -930,10 +858,10 @@ class _NetworkHealthScreenState extends State<NetworkHealthScreen>
             width: 120,
             child: Text(
               '$label:',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+              style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
             ),
           ),
-          Expanded(child: Text(value, style: TextStyle(color: Colors.black87))),
+          Expanded(child: Text(value, style: TextStyle(color: AppColors.textPrimary))),
         ],
       ),
     );

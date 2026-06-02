@@ -1,5 +1,6 @@
 import 'package:civic_app_4/models/models.dart';
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -181,73 +182,57 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        scaffoldBackgroundColor: Colors.grey[50],
-        cardColor: Colors.white,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black87,
-          elevation: 1,
-          shadowColor: Colors.grey[300],
-        ),
-        cardTheme: CardThemeData(
-          color: Colors.white,
-          shadowColor: Colors.grey[300],
-          elevation: 2,
-        ),
-        dialogTheme: DialogThemeData(
-          backgroundColor: Colors.white,
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: AppColors.background,
+    appBar: AppBar(
+      backgroundColor: AppColors.surface,
+      foregroundColor: AppColors.textPrimary,
+      elevation: 0,
+      surfaceTintColor: Colors.transparent,
+      title: Text(
+        'SMS Complaints',
+        style: GoogleFonts.inter(
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.bold,
         ),
       ),
-      child: Container(
-        color: Colors.grey[50],
-        child: Scaffold(
-          backgroundColor: Colors.grey[50],
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black87,
-            elevation: 1,
-            shadowColor: Colors.grey[300],
-            title: Text('SMS Complaints', style: GoogleFonts.playfairDisplay(color: Colors.blueGrey,fontWeight: FontWeight.bold)),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.refresh, color: Colors.black87),
-                onPressed: _loadComplaints,
-              ),
-              IconButton(
-                icon: Icon(Icons.filter_list, color: Colors.black87),
-                onPressed: _showFilterDialog,
-              ),
-            ],
-          ),
-          body: _loading
-              ? Center(child: CircularProgressIndicator())
-              : _error != null
-                  ? _buildErrorWidget()
-                  : _buildComplaintsView(),
-          floatingActionButton: FloatingActionButton(
-            onPressed: _showAddComplaintDialog,
-            child: Icon(Icons.add),
-            tooltip: 'Add Test Complaint',
-          ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.refresh, color: AppColors.textPrimary),
+          onPressed: _loadComplaints,
         ),
-      ),
-    );
-  }
+        IconButton(
+          icon: Icon(Icons.filter_list, color: AppColors.textPrimary),
+          onPressed: _showFilterDialog,
+        ),
+      ],
+    ),
+    body: _loading
+        ? const Center(child: CircularProgressIndicator())
+        : _error != null
+            ? _buildErrorWidget()
+            : _buildComplaintsView(),
+    floatingActionButton: FloatingActionButton(
+      onPressed: _showAddComplaintDialog,
+      child: const Icon(Icons.add),
+      tooltip: 'Add Test Complaint',
+    ),
+  );
+}
+
 
   Widget _buildErrorWidget() {
     return Container(
-      color: Colors.grey[50],
+      color: AppColors.background,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.error, size: 64, color: Colors.red),
             SizedBox(height: 16),
-            Text('Error: $_error', style: TextStyle(color: Colors.black87)),
+            Text('Error: $_error', style: TextStyle(color: AppColors.textPrimary)),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadComplaints,
@@ -261,7 +246,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
 
   Widget _buildComplaintsView() {
     return Container(
-      color: Colors.grey[50],
+      color: AppColors.background,
       child: Column(
         children: [
           _buildSearchAndStats(),
@@ -283,7 +268,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
 
   Widget _buildSearchAndStats() {
     return Container(
-      color: Colors.white,
+      color: AppColors.surface,
       padding: EdgeInsets.all(16),
       child: Column(
         children: [
@@ -291,24 +276,24 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
           TextField(
             decoration: InputDecoration(
               hintText: 'Search complaints...',
-              hintStyle: GoogleFonts.roboto(color: Colors.grey[600]),
-              prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
+              hintStyle: GoogleFonts.roboto(color: AppColors.textSecondary),
+              prefixIcon: Icon(Icons.search, color: AppColors.textSecondary),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey[300]!),
+                borderSide: BorderSide(color: AppColors.border!),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey[300]!),
+                borderSide: BorderSide(color: AppColors.border!),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Colors.blue[600]!),
               ),
               filled: true,
-              fillColor: Colors.grey[50],
+              fillColor: AppColors.background,
             ),
-            style: TextStyle(color: Colors.black87),
+            style: TextStyle(color: AppColors.textPrimary),
             onChanged: (value) {
               _searchQuery = value;
               _filterComplaints();
@@ -388,21 +373,21 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
 
   Widget _buildEmptyState() {
     return Container(
-      color: Colors.grey[50],
+      color: AppColors.background,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.message_outlined, size: 64, color: Colors.grey),
+            Icon(Icons.message_outlined, size: 64, color: AppColors.textMuted),
             SizedBox(height: 16),
             Text(
               'No complaints found',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.black87),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.textPrimary),
             ),
             Text(
               'Complaints will appear here when received via SMS',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[600],
+                color: AppColors.textSecondary,
               ),
             ),
           ],
@@ -413,8 +398,8 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
 
   Widget _buildComplaintCard(Complaint complaint) {
     return Card(
-      color: Colors.white,
-      shadowColor: Colors.grey[300],
+      color: AppColors.card,
+      shadowColor: AppColors.border,
       elevation: 2,
       margin: EdgeInsets.only(bottom: 12),
       child: InkWell(
@@ -440,12 +425,12 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
                           complaint.id,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey[600],
+                            color: AppColors.textSecondary,
                           ),
                         ),
                         Text(
                           complaint.phoneNumber,
-                          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                          style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
                         ),
                       ],
                     ),
@@ -458,7 +443,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
               SizedBox(height: 12),
               Text(
                 complaint.translatedText,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.black87),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textPrimary),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -468,7 +453,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
                   'Original: ${complaint.originalText}',
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.grey[600],
+                    color: AppColors.textSecondary,
                     fontStyle: FontStyle.italic,
                   ),
                   maxLines: 1,
@@ -478,16 +463,16 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
               SizedBox(height: 12),
               Row(
                 children: [
-                  Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
+                  Icon(Icons.location_on, size: 16, color: AppColors.textSecondary),
                   SizedBox(width: 4),
                   Text(
                     complaint.location,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
                   ),
                   Spacer(),
                   Text(
                     _formatTimestamp(complaint.timestamp),
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
                   ),
                 ],
               ),
@@ -511,7 +496,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
         color = Colors.green;
         break;
       default:
-        color = Colors.grey;
+        color = AppColors.textMuted;
     }
 
     return Container(
@@ -576,7 +561,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
       case 'LOW':
         return Colors.green;
       default:
-        return Colors.grey;
+        return AppColors.textMuted;
     }
   }
 
@@ -595,30 +580,30 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       builder: (context) => DraggableScrollableSheet(
         initialChildSize: 0.7,
         maxChildSize: 0.9,
         minChildSize: 0.5,
         builder: (context, scrollController) => Container(
-          color: Colors.white,
+          color: AppColors.surface,
           padding: EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Icon(_getCategoryIcon(complaint.category), color: Colors.black87),
+                  Icon(_getCategoryIcon(complaint.category), color: AppColors.textPrimary),
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'Complaint ${complaint.id}',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.black87),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.textPrimary),
                     ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: Icon(Icons.close, color: Colors.black87),
+                    icon: Icon(Icons.close, color: AppColors.textPrimary),
                   ),
                 ],
               ),
@@ -638,13 +623,13 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
                       _buildDetailRow('Confidence', '${(complaint.confidence * 100).toInt()}%'),
                       _buildDetailRow('Timestamp', complaint.timestamp.toString()),
                       SizedBox(height: 16),
-                      Text('Original Message:', style: GoogleFonts.playfairDisplay(fontWeight: FontWeight.bold, color: Colors.black87)),
+                      Text('Original Message:', style: GoogleFonts.inter(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                       SizedBox(height: 8),
-                      Text(complaint.originalText, style: TextStyle(color: Colors.black87)),
+                      Text(complaint.originalText, style: TextStyle(color: AppColors.textPrimary)),
                       SizedBox(height: 16),
-                      Text('Translated Message:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
+                      Text('Translated Message:', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                       SizedBox(height: 8),
-                      Text(complaint.translatedText, style: TextStyle(color: Colors.black87)),
+                      Text(complaint.translatedText, style: TextStyle(color: AppColors.textPrimary)),
                     ],
                   ),
                 ),
@@ -684,10 +669,10 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
             width: 100,
             child: Text(
               '$label:',
-              style: GoogleFonts.playfairDisplay(fontWeight: FontWeight.bold, color: Colors.black87),
+              style: GoogleFonts.inter(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
             ),
           ),
-          Expanded(child: Text(value, style: TextStyle(color: Colors.black87))),
+          Expanded(child: Text(value, style: TextStyle(color: AppColors.textPrimary))),
         ],
       ),
     );
@@ -710,8 +695,8 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text('Filter Complaints', style: GoogleFonts.playfairDisplay(color: Colors.blueGrey)),
+        backgroundColor: AppColors.surface,
+        title: Text('Filter Complaints', style: GoogleFonts.inter(color: AppColors.textPrimary)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -719,19 +704,19 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
               value: _selectedCategory,
               decoration: InputDecoration(
                 labelText: 'Category',
-                labelStyle: TextStyle(color: Colors.grey[600]),
+                labelStyle: TextStyle(color: AppColors.textSecondary),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[300]!),
+                  borderSide: BorderSide(color: AppColors.border!),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[300]!),
+                  borderSide: BorderSide(color: AppColors.border!),
                 ),
               ),
-              style: TextStyle(color: Colors.black87),
+              style: TextStyle(color: AppColors.textPrimary),
               items: _categories.map((category) {
                 return DropdownMenuItem(
                   value: category,
-                  child: Text(category.replaceAll('_', ' '), style: TextStyle(color: Colors.black87)),
+                  child: Text(category.replaceAll('_', ' '), style: TextStyle(color: AppColors.textPrimary)),
                 );
               }).toList(),
               onChanged: (value) {
@@ -745,19 +730,19 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
               value: _selectedPriority,
               decoration: InputDecoration(
                 labelText: 'Priority',
-                labelStyle: TextStyle(color: Colors.grey[600]),
+                labelStyle: TextStyle(color: AppColors.textSecondary),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[300]!),
+                  borderSide: BorderSide(color: AppColors.border!),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[300]!),
+                  borderSide: BorderSide(color: AppColors.border!),
                 ),
               ),
-              style: TextStyle(color: Colors.black87),
+              style: TextStyle(color: AppColors.textPrimary),
               items: _priorities.map((priority) {
                 return DropdownMenuItem(
                   value: priority,
-                  child: Text(priority, style: TextStyle(color: Colors.black87)),
+                  child: Text(priority, style: TextStyle(color: AppColors.textPrimary)),
                 );
               }).toList(),
               onChanged: (value) {
@@ -799,39 +784,39 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text('Add Test Complaint', style: TextStyle(color: Colors.black87)),
+        backgroundColor: AppColors.surface,
+        title: Text('Add Test Complaint', style: TextStyle(color: AppColors.textPrimary)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: phoneController,
-              style: TextStyle(color: Colors.black87),
+              style: TextStyle(color: AppColors.textPrimary),
               decoration: InputDecoration(
                 labelText: 'Phone Number',
-                labelStyle: TextStyle(color: Colors.grey[600]),
+                labelStyle: TextStyle(color: AppColors.textSecondary),
                 hintText: '+8801XXXXXXXXX',
-                hintStyle: TextStyle(color: Colors.grey[400]),
+                hintStyle: TextStyle(color: AppColors.textMuted),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[300]!),
+                  borderSide: BorderSide(color: AppColors.border!),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[300]!),
+                  borderSide: BorderSide(color: AppColors.border!),
                 ),
               ),
             ),
             SizedBox(height: 16),
             TextField(
               controller: messageController,
-              style: TextStyle(color: Colors.black87),
+              style: TextStyle(color: AppColors.textPrimary),
               decoration: InputDecoration(
                 labelText: 'Complaint Message',
-                labelStyle: TextStyle(color: Colors.grey[600]),
+                labelStyle: TextStyle(color: AppColors.textSecondary),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[300]!),
+                  borderSide: BorderSide(color: AppColors.border!),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[300]!),
+                  borderSide: BorderSide(color: AppColors.border!),
                 ),
               ),
               maxLines: 3,

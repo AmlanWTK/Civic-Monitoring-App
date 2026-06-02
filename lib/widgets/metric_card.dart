@@ -1,3 +1,4 @@
+import 'package:civic_app_4/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -21,73 +22,79 @@ class MetricCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white, // White background
-      elevation: 3,        // Soft shadow
-      shadowColor: Colors.grey[300], // Light shadow
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.card,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withOpacity(0.25), width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.08),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: color.withOpacity(0.15), // lighter background for icon
-                      borderRadius: BorderRadius.circular(8),
+                      color: color.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(10),
+                      border:
+                          Border.all(color: color.withOpacity(0.25), width: 1),
                     ),
-                    child: Icon(
-                      icon,
-                      color: color,
-                      size: 24,
-                    ),
+                    child: Icon(icon, color: color, size: 20),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   if (onTap != null)
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      size: 16,
-                      color: Colors.grey[400], // softer arrow
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: AppColors.border,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Icon(Icons.arrow_forward_ios_rounded,
+                          size: 9, color: AppColors.textMuted),
                     ),
                 ],
               ),
-              SizedBox(height: 12),
+              const Spacer(),
               Text(
                 value,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: color,
-                    ),
+                style: GoogleFonts.inter(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w800,
+                  color: color,
+                  letterSpacing: -0.5,
+                ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(
-  title,
-  style: GoogleFonts.playfairDisplay(
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
-    //color: Colors.grey[700],
-    fontSize: 16, // optional, adjust as needed
-  ),
-),
+                title,
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimary,
+                ),
+              ),
               if (subtitle != null) ...[
-                SizedBox(height: 4),
+                const SizedBox(height: 3),
                 Text(
-  subtitle!,
-  style: GoogleFonts.roboto(   // or any Google Font you want
-    textStyle: Theme.of(context).textTheme.bodySmall,
-    color: Colors.grey[700],
-    fontSize: 11,
-  ),
-),
-
+                  subtitle!,
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    color: AppColors.textMuted,
+                  ),
+                ),
               ],
             ],
           ),

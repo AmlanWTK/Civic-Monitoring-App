@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:civic_app_4/widgets/line_chart_painter.dart';
 import 'package:civic_app_4/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ChartWidget extends StatelessWidget {
@@ -35,9 +36,9 @@ class ChartWidget extends StatelessWidget {
           children: [
             Text(
               title,
-              style: GoogleFonts.playfairDisplay(
+              style: GoogleFonts.inter(
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: AppColors.textPrimary,
                 fontSize: 15
                 
               ),
@@ -54,7 +55,7 @@ class ChartWidget extends StatelessWidget {
                   xAxisLabel!,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.grey[600],
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ),
@@ -123,7 +124,7 @@ class ChartWidget extends StatelessWidget {
                 SizedBox(height: 4),
                 Text(
                   item.label,
-                  style: TextStyle(fontSize: 10,color: Colors.black),
+                  style: TextStyle(fontSize: 10,color: AppColors.textPrimary),
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
@@ -176,7 +177,7 @@ class ChartWidget extends StatelessWidget {
                     Expanded(
                       child: Text(
                         item.label,
-                        style: TextStyle(fontSize: 12,color: Colors.black),
+                        style: TextStyle(fontSize: 12,color: AppColors.textPrimary),
                         overflow: TextOverflow.ellipsis,
                         
                       ),

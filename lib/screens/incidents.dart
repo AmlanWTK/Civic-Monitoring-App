@@ -2,6 +2,7 @@
 // Uses multiple FREE APIs for actual disaster data
 
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -646,7 +647,7 @@ class _RealIncidentsScreenState extends State<RealIncidentsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Real-Time Disaster Incidents',style: GoogleFonts.playfairDisplay(fontWeight: FontWeight.bold,color: Colors.blueGrey, fontSize: 20),),
+        title: Text('Real-Time Disaster Incidents',style: GoogleFonts.inter(fontWeight: FontWeight.bold,color: AppColors.textPrimary, fontSize: 20),),
         elevation: 0,
         bottom: TabBar(
           controller: _tabController,
@@ -746,7 +747,7 @@ class _RealIncidentsScreenState extends State<RealIncidentsScreen>
         color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.textPrimary.withOpacity(0.1),
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -1276,9 +1277,9 @@ class _RealIncidentsScreenState extends State<RealIncidentsScreen>
                 SizedBox(width: 8),
                 Text(
                   'Live Data Sources',
-                  style: GoogleFonts.playfairDisplay(
+                  style: GoogleFonts.inter(
                     fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey,
+                    color: AppColors.textPrimary,
                     fontSize: 18
                   ),
                 ),
@@ -1383,15 +1384,15 @@ class _RealIncidentsScreenState extends State<RealIncidentsScreen>
                     children: [
                       Text(
                         'Real-Time Incident Analytics',
-                        style: GoogleFonts.playfairDisplay(
-                          color: Colors.blueGrey,
+                        style: GoogleFonts.inter(
+                          color: AppColors.textPrimary,
                           fontWeight: FontWeight.bold,
                           fontSize: 20
                         ),
                       ),
                       Text(
                         'Live disaster monitoring from USGS, NASA, GDACS & ReliefWeb',
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(color: AppColors.textSecondary),
                       ),
                     ],
                   ),
@@ -1429,8 +1430,8 @@ class _RealIncidentsScreenState extends State<RealIncidentsScreen>
       children: [
         Text(
           'Live Severity Distribution',
-          style: GoogleFonts.playfairDisplay(
-            color: Colors.blueGrey,
+          style: GoogleFonts.inter(
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
             fontSize: 20
           ),
@@ -1467,8 +1468,8 @@ class _RealIncidentsScreenState extends State<RealIncidentsScreen>
       children: [
         Text(
           'Real Incident Types',
-          style: GoogleFonts.playfairDisplay(
-            color: Colors.blueGrey,
+          style: GoogleFonts.inter(
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
             fontSize: 20
           ),
@@ -1583,7 +1584,7 @@ class _RealIncidentsScreenState extends State<RealIncidentsScreen>
                       _getTimeAgo(incident.time),
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey[600],
+                        color: AppColors.textSecondary,
                       ),
                     ),
                     SizedBox(width: 8),
@@ -1674,7 +1675,7 @@ class _RealIncidentsScreenState extends State<RealIncidentsScreen>
                 SizedBox(height: 4),
                 Text(
                   description,
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
                 ),
               ],
             ),
@@ -1710,7 +1711,7 @@ class _RealIncidentsScreenState extends State<RealIncidentsScreen>
               title,
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.grey[600],
+                color: AppColors.textSecondary,
               ),
             ),
           ],

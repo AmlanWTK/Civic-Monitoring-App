@@ -1,4 +1,5 @@
 import 'package:civic_app_4/services/prediction_service.dart';
+import 'package:civic_app_4/theme.dart';
 import 'package:civic_app_4/widgets/alert_widget.dart';
 import 'package:civic_app_4/widgets/metric_card.dart';
 import 'package:civic_app_4/widgets/widgets.dart';
@@ -333,37 +334,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: _loading
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text(
-                    _dataStatus,
-                    style: GoogleFonts.roboto(color: Colors.grey[600]),
-                  ),
+                  CircularProgressIndicator(color: AppColors.primary),
+                  const SizedBox(height: 16),
+                  Text(_dataStatus,
+                      style: GoogleFonts.inter(
+                          color: AppColors.textSecondary, fontSize: 13)),
                 ],
               ),
             )
           : RefreshIndicator(
+              color: AppColors.primary,
+              backgroundColor: AppColors.card,
               onRefresh: _loadDashboardData,
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildHeaderSection(),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     _buildRealTimeFactorsCard(),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     _buildMetricsGrid(),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     _buildAlertsSection(),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     _buildTowerStatusSection(),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -372,191 +375,226 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildRealTimeFactorsCard() {
-    return Card(
-      color: Colors.white,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.public, color: Colors.green),
-                SizedBox(width: 8),
-                Text(
-                  'Live External Factors',
-                  style: GoogleFonts.playfairDisplay(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
+    return Container(
+      decoration: AppDecorations.glassCard(),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.success.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                Spacer(),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    'LIVE',
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildFactorItem(
-                    'Earthquakes',
-                    '${_realTimeFactors['earthquakeRisk'] ?? 0}',
-                    Icons.public,
-                    Colors.red,
-                  ),
-                ),
-                Expanded(
-                  child: _buildFactorItem(
-                    'Weather',
-                    '${_realTimeFactors['weatherImpact'] ?? 0}%',
-                    Icons.cloud,
-                    Colors.orange,
-                  ),
-                ),
-                Expanded(
-                  child: _buildFactorItem(
-                    'Internet',
-                    '${_realTimeFactors['internetHealth'] ?? 100}%',
-                    Icons.wifi,
-                    Colors.blue,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 8),
-            Text(
-              _dataStatus,
-              style: GoogleFonts.roboto(
-                fontSize: 11,
-                color: _dataStatus.contains('✅') ? Colors.green : Colors.orange,
+                child: const Icon(Icons.public_rounded,
+                    color: AppColors.success, size: 18),
               ),
+              const SizedBox(width: 10),
+              Text('Live External Factors',
+                  style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                      fontSize: 14)),
+              const Spacer(),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                decoration: AppDecorations.statusBadge(AppColors.success),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        width: 5,
+                        height: 5,
+                        decoration: const BoxDecoration(
+                            color: AppColors.success,
+                            shape: BoxShape.circle)),
+                    const SizedBox(width: 5),
+                    Text('LIVE',
+                        style: GoogleFonts.inter(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.success,
+                            letterSpacing: 0.8)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              Expanded(
+                child: _buildFactorItem('Earthquakes',
+                    '${_realTimeFactors['earthquakeRisk'] ?? 0}',
+                    Icons.public_rounded, AppColors.error)),
+              Expanded(
+                child: _buildFactorItem('Weather Impact',
+                    '${_realTimeFactors['weatherImpact'] ?? 0}%',
+                    Icons.cloud_rounded, AppColors.warning)),
+              Expanded(
+                child: _buildFactorItem('Internet',
+                    '${_realTimeFactors['internetHealth'] ?? 100}%',
+                    Icons.wifi_rounded, AppColors.primary)),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: (_dataStatus.contains('✅')
+                      ? AppColors.success
+                      : AppColors.warning)
+                  .withOpacity(0.08),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                  color: (_dataStatus.contains('✅')
+                          ? AppColors.success
+                          : AppColors.warning)
+                      .withOpacity(0.3)),
             ),
-          ],
-        ),
+            child: Text(_dataStatus,
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  color: _dataStatus.contains('✅')
+                      ? AppColors.success
+                      : AppColors.warning,
+                )),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildFactorItem(String label, String value, IconData icon, Color color) {
+  Widget _buildFactorItem(
+      String label, String value, IconData icon, Color color) {
     return Column(
       children: [
-        Icon(icon, color: color, size: 20),
-        SizedBox(height: 4),
-        Text(
-          value,
-          style: GoogleFonts.roboto(
-            fontWeight: FontWeight.bold,
-            color: color,
-            fontSize: 12,
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(8),
           ),
+          child: Icon(icon, color: color, size: 18),
         ),
-        Text(
-          label,
-          style: GoogleFonts.roboto(
-            fontSize: 10,
-            color: Colors.grey[600],
-          ),
-        ),
+        const SizedBox(height: 6),
+        Text(value,
+            style: GoogleFonts.inter(
+                fontWeight: FontWeight.w800,
+                color: color,
+                fontSize: 16)),
+        const SizedBox(height: 2),
+        Text(label,
+            style: GoogleFonts.inter(
+                fontSize: 10, color: AppColors.textMuted),
+            textAlign: TextAlign.center),
       ],
     );
   }
 
   Widget _buildHeaderSection() {
-    return Card(
-      color: Colors.white,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.dashboard, size: 32, color: Colors.blueAccent),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Live Infrastructure Dashboard',
-                        style: GoogleFonts.playfairDisplay(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        'Real-time monitoring with live external data feeds',
-                        style: GoogleFonts.roboto(
-                          fontSize: 14,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: _getHealthColor(_metrics['networkHealth']).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.circle,
-                        color: _getHealthColor(_metrics['networkHealth']),
-                        size: 10,
-                      ),
-                      SizedBox(width: 6),
-                      Text(
-                        '${_metrics['networkHealth']}%',
-                        style: GoogleFonts.roboto(
-                          fontWeight: FontWeight.w600,
-                          color: _getHealthColor(_metrics['networkHealth']),
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 12),
-            Row(
-              children: [
-                Icon(Icons.access_time, size: 12, color: Colors.grey[600]),
-                SizedBox(width: 4),
-                Text(
-                  'Auto-refresh: 15s | Last update: ${DateTime.now().toString().substring(11, 19)}',
-                  style: GoogleFonts.roboto(
-                    color: Colors.grey[600],
-                    fontSize: 11,
-                  ),
-                ),
-              ],
-            ),
-          ],
+    final healthColor = _getHealthColor(_metrics['networkHealth']);
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF1A2550), Color(0xFF0E1A38)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.12),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  gradient: AppColors.gradientPrimary,
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withOpacity(0.4),
+                      blurRadius: 16,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                child: const Icon(Icons.dashboard_rounded,
+                    color: Colors.white, size: 24),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Live Infrastructure Dashboard',
+                        style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 18,
+                            color: AppColors.textPrimary)),
+                    const SizedBox(height: 3),
+                    Text('Real-time monitoring with live data feeds',
+                        style: GoogleFonts.inter(
+                            fontSize: 12, color: AppColors.textSecondary)),
+                  ],
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: AppDecorations.statusBadge(healthColor),
+                child: Column(
+                  children: [
+                    Text('${_metrics['networkHealth']}%',
+                        style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w800,
+                            color: healthColor,
+                            fontSize: 18)),
+                    Text('Health',
+                        style: GoogleFonts.inter(
+                            fontSize: 9,
+                            color: healthColor,
+                            fontWeight: FontWeight.w600)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            height: 1,
+            color: AppColors.border,
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const Icon(Icons.access_time_rounded,
+                  size: 13, color: AppColors.textMuted),
+              const SizedBox(width: 5),
+              Text(
+                'Auto-refresh: 15s  •  Updated: ${DateTime.now().toString().substring(11, 19)}',
+                style: GoogleFonts.inter(
+                    color: AppColors.textMuted, fontSize: 11),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -607,58 +645,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Live Alerts',
-              style: GoogleFonts.playfairDisplay(
-                fontWeight: FontWeight.bold,
-                color: Colors.blueGrey,
-                fontSize: 25
-              ),
-            ),
+            Text('Live Alerts',
+                style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary,
+                    fontSize: 16)),
+            const SizedBox(width: 10),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.red.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: AppDecorations.statusBadge(AppColors.error),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.circle, color: Colors.red, size: 8),
-                  SizedBox(width: 4),
-                  Text(
-                    'LIVE',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Container(
+                      width: 5,
+                      height: 5,
+                      decoration: const BoxDecoration(
+                          color: AppColors.error, shape: BoxShape.circle)),
+                  const SizedBox(width: 4),
+                  Text('LIVE',
+                      style: GoogleFonts.inter(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.error,
+                          letterSpacing: 0.8)),
                 ],
               ),
             ),
           ],
         ),
-        SizedBox(height: 12),
-        Card(
-          color: Colors.white,
-          elevation: 2,
-          child: Column(
-            children: _recentAlerts.take(4).map((alert) {
-              return AlertWidget(
-                icon: alert['icon'],
-                title: alert['title'],
-                message: alert['message'],
-                time: alert['time'],
-                color: alert['color'],
-                onTap: () {
-                  _showAlertDetails(alert);
-                },
-              );
-            }).toList(),
-          ),
+        const SizedBox(height: 12),
+        Column(
+          children: _recentAlerts.take(4).map((alert) {
+            return AlertWidget(
+              icon: alert['icon'],
+              title: alert['title'],
+              message: alert['message'],
+              time: alert['time'],
+              color: alert['color'],
+              onTap: () => _showAlertDetails(alert),
+            );
+          }).toList(),
         ),
       ],
     );
@@ -668,59 +697,94 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Live Tower Status',
-          style: GoogleFonts.playfairDisplay(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-            color: Colors.blueGrey,
-          ),
-        ),
-        SizedBox(height: 12),
-        Card(
-          color: Colors.white,
-          elevation: 2,
-          child: Column(
-            children: _towerStatus.map((tower) {
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: _getTowerStatusColor(tower['status']).withOpacity(0.2),
-                  child: Icon(
-                    Icons.cell_tower,
-                    color: _getTowerStatusColor(tower['status']),
-                  ),
-                ),
-                title: Text('${tower['id']} - ${tower['location']}', style: GoogleFonts.roboto(color: Colors.black)),
-                subtitle: Row(
+        Text('Live Tower Status',
+            style: GoogleFonts.inter(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary)),
+        const SizedBox(height: 12),
+        Column(
+          children: _towerStatus.map((tower) {
+            final statusColor =
+                _getTowerStatusColor(tower['status']);
+            return GestureDetector(
+              onTap: () => _showTowerDetails(tower),
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.all(14),
+                decoration: AppDecorations.glassCard(),
+                child: Row(
                   children: [
-                    Text('Signal: ${tower['signal']}%', style: TextStyle(color: Colors.grey[600])),
-                    SizedBox(width: 8),
-                    Icon(Icons.circle, color: Colors.green, size: 8),
-                    SizedBox(width: 4),
-                    Text('LIVE', style: TextStyle(color: Colors.green, fontSize: 10)),
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: statusColor.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            color: statusColor.withOpacity(0.35)),
+                      ),
+                      child: Icon(Icons.cell_tower_rounded,
+                          color: statusColor, size: 22),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              '${tower['id']}  •  ${tower['location']}',
+                              style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.textPrimary,
+                                  fontSize: 13)),
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Icon(Icons.signal_cellular_alt_rounded,
+                                  size: 13,
+                                  color: AppColors.textMuted),
+                              const SizedBox(width: 4),
+                              Text('Signal: ${tower['signal']}%',
+                                  style: GoogleFonts.inter(
+                                      fontSize: 12,
+                                      color: AppColors.textSecondary)),
+                              const SizedBox(width: 8),
+                              Container(
+                                  width: 5,
+                                  height: 5,
+                                  decoration: const BoxDecoration(
+                                      color: AppColors.success,
+                                      shape: BoxShape.circle)),
+                              const SizedBox(width: 3),
+                              Text('LIVE',
+                                  style: GoogleFonts.inter(
+                                      fontSize: 9,
+                                      color: AppColors.success,
+                                      fontWeight: FontWeight.w700)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration:
+                          AppDecorations.statusBadge(statusColor),
+                      child: Text(
+                          tower['status'].toString().toUpperCase(),
+                          style: GoogleFonts.inter(
+                              color: statusColor,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.5)),
+                    ),
                   ],
                 ),
-                trailing: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: _getTowerStatusColor(tower['status']).withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    tower['status'].toString().toUpperCase(),
-                    style: TextStyle(
-                      color: _getTowerStatusColor(tower['status']),
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  _showTowerDetails(tower);
-                },
-              );
-            }).toList(),
-          ),
+              ),
+            );
+          }).toList(),
         ),
       ],
     );
@@ -748,32 +812,57 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _showAlertDetails(Map<String, dynamic> alert) {
+    final Color c = alert['color'] as Color;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: c.withOpacity(0.4)),
+        ),
         title: Row(
           children: [
-            Icon(alert['icon'], color: alert['color']),
-            SizedBox(width: 8),
-            Expanded(child: Text(alert['title'], style: TextStyle(color: Colors.black))),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: c.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(alert['icon'] as IconData, color: c, size: 20),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(alert['title'] as String,
+                  style: GoogleFonts.inter(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15)),
+            ),
           ],
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(alert['message'], style: TextStyle(color: Colors.black87)),
-            SizedBox(height: 12),
+            Text(alert['message'] as String,
+                style: GoogleFonts.inter(
+                    color: AppColors.textSecondary, fontSize: 13, height: 1.5)),
+            const SizedBox(height: 12),
             Container(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
+                color: AppColors.primary.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                    color: AppColors.primary.withOpacity(0.25)),
               ),
               child: Text(
-                '📡 This alert is generated from real-time external data feeds including seismic activity, weather patterns, and internet connectivity status.',
-                style: TextStyle(fontSize: 12, color: Colors.blue[800]),
+                '📡 Generated from real-time external data feeds: seismic activity, weather patterns, and internet connectivity.',
+                style: GoogleFonts.inter(
+                    fontSize: 11,
+                    color: AppColors.primary,
+                    height: 1.5),
               ),
             ),
           ],
@@ -781,17 +870,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Close', style: TextStyle(color: Colors.blue)),
+            child: const Text('Close'),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Alert acknowledged and logged')),
+                const SnackBar(content: Text('Alert acknowledged and logged')),
               );
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-            child: Text('Acknowledge', style: TextStyle(color: Colors.white)),
+            child: const Text('Acknowledge'),
           ),
         ],
       ),
@@ -799,46 +887,93 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _showTowerDetails(Map<String, dynamic> tower) {
+    final statusColor = _getTowerStatusColor(tower['status']);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text('Tower ${tower['id']} - Live Status', style: TextStyle(color: Colors.black)),
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: statusColor.withOpacity(0.4)),
+        ),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: statusColor.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(Icons.cell_tower_rounded,
+                  color: statusColor, size: 20),
+            ),
+            const SizedBox(width: 10),
+            Text('Tower ${tower['id']}',
+                style: GoogleFonts.inter(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w700)),
+          ],
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Location: ${tower['location']}', style: TextStyle(color: Colors.black)),
-            Text('Signal Strength: ${tower['signal']}% (Live)', style: TextStyle(color: Colors.black)),
-            Text('Status: ${tower['status']}', style: TextStyle(color: Colors.black)),
-            SizedBox(height: 16),
-            Text('Real-time Metrics:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
-            Text('• Uptime: ${99.0 + Random().nextDouble()}%', style: TextStyle(color: Colors.black87)),
-          Text(
-  '• Throughput: ${(1.0 + Random().nextDouble()).toStringAsFixed(1)} Gbps',
-  style: TextStyle(color: Colors.black87),
-),
-
-            Text('• Connected Users: ${1200 + Random().nextInt(500)}', style: TextStyle(color: Colors.black87)),
-            Text('• Last Updated: ${DateTime.now().toString().substring(11, 19)}', style: TextStyle(color: Colors.green, fontSize: 12)),
+            _towerDetailRow('Location', tower['location'] as String),
+            _towerDetailRow('Signal', '${tower['signal']}%'),
+            _towerDetailRow('Status', (tower['status'] as String).toUpperCase()),
+            const SizedBox(height: 12),
+            Container(height: 1, color: AppColors.border),
+            const SizedBox(height: 12),
+            Text('Real-time Metrics',
+                style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary,
+                    fontSize: 13)),
+            const SizedBox(height: 8),
+            _towerDetailRow('Uptime', '${(99.0 + Random().nextDouble()).toStringAsFixed(2)}%'),
+            _towerDetailRow('Throughput', '${(1.0 + Random().nextDouble()).toStringAsFixed(1)} Gbps'),
+            _towerDetailRow('Connected Users', '${1200 + Random().nextInt(500)}'),
+            _towerDetailRow('Updated', DateTime.now().toString().substring(11, 19)),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Close', style: TextStyle(color: Colors.blue)),
+            child: const Text('Close'),
           ),
           if (tower['status'] != 'healthy')
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Maintenance scheduled for Tower ${tower['id']}')),
+                  SnackBar(
+                      content: Text(
+                          'Maintenance scheduled for Tower ${tower['id']}')),
                 );
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-              child: Text('Schedule Maintenance', style: TextStyle(color: Colors.white)),
+              child: const Text('Schedule Maintenance'),
             ),
+        ],
+      ),
+    );
+  }
+
+  Widget _towerDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Text('$label:',
+              style: GoogleFonts.inter(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textSecondary)),
+          const Spacer(),
+          Text(value,
+              style: GoogleFonts.inter(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary)),
         ],
       ),
     );

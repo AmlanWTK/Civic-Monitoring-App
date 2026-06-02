@@ -2,6 +2,7 @@ import 'package:civic_app_4/models/models.dart';
 import 'package:civic_app_4/widgets/metric_card.dart';
 import 'package:civic_app_4/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../services/prediction_service.dart';
@@ -116,89 +117,64 @@ class _PredictionsScreenState extends State<PredictionsScreen>
     };
     return locations[towerId] ?? 'Unknown';
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        scaffoldBackgroundColor: Colors.grey[50],
-        cardColor: Colors.white,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black87,
-          elevation: 1,
-          shadowColor: Colors.grey[300],
-        ),
-        tabBarTheme: TabBarThemeData(
-          labelColor: Colors.blue[600],
-          unselectedLabelColor: Colors.grey[600],
-          indicatorColor: Colors.blue[600],
-        ),
-        cardTheme: CardThemeData(
-          color: Colors.white,
-          shadowColor: Colors.grey[300],
-          elevation: 2,
-        ),
-        dialogTheme: DialogThemeData(
-          backgroundColor: Colors.white,
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: AppColors.background,
+    appBar: AppBar(
+      backgroundColor: AppColors.surface,
+      foregroundColor: AppColors.textPrimary,
+      elevation: 0,
+      surfaceTintColor: Colors.transparent,
+      title: Text(
+        'Predictive Maintenance',
+        style: GoogleFonts.inter(
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.bold,
         ),
       ),
-      child: Container(
-        color: Colors.grey[50],
-        child: Scaffold(
-          backgroundColor: Colors.grey[50],
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black87,
-            elevation: 1,
-            shadowColor: Colors.grey[300],
-            title: Text('Predictive Maintenance', style: GoogleFonts.playfairDisplay(color: Colors.blueGrey, fontWeight: FontWeight.bold)),
-            bottom: TabBar(
-              controller: _tabController,
-              labelColor: Colors.blue[600],
-              unselectedLabelColor: Colors.grey[600],
-              indicatorColor: Colors.blue[600],
-              tabs: [
-                Tab(icon: Icon(Icons.warning), text: 'Alerts'),
-                Tab(icon: Icon(Icons.build), text: 'Maintenance'),
-                // Removed the Trends tab
-              ],
-            ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.refresh, color: Colors.black87),
-                onPressed: _loadPredictiveData,
+      bottom: TabBar(
+        controller: _tabController,
+        labelColor: Colors.blue[600],
+        unselectedLabelColor: AppColors.textSecondary,
+        indicatorColor: Colors.blue[600],
+        tabs: const [
+          Tab(icon: Icon(Icons.warning), text: 'Alerts'),
+          Tab(icon: Icon(Icons.build), text: 'Maintenance'),
+        ],
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.refresh, color: AppColors.textPrimary),
+          onPressed: _loadPredictiveData,
+        ),
+      ],
+    ),
+    body: _loading
+        ? const Center(child: CircularProgressIndicator())
+        : _error != null
+            ? _buildErrorWidget()
+            : TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildAlertsTab(),
+                  _buildMaintenanceTab(),
+                ],
               ),
-            ],
-          ),
-          body: _loading
-              ? Center(child: CircularProgressIndicator())
-              : _error != null
-                  ? _buildErrorWidget()
-                  : TabBarView(
-                      controller: _tabController,
-                      children: [
-                        _buildAlertsTab(),
-                        _buildMaintenanceTab(),
-                        // Removed _buildTrendsTab()
-                      ],
-                    ),
-        ),
-      ),
-    );
-  }
+  );
+}
 
   Widget _buildErrorWidget() {
     return Container(
-      color: Colors.grey[50],
+      color: AppColors.background,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.error, size: 64, color: Colors.red),
             SizedBox(height: 16),
-            Text('Error loading predictive data', style: TextStyle(color: Colors.black87)),
-            Text(_error ?? 'Unknown error', style: TextStyle(color: Colors.black87)),
+            Text('Error loading predictive data', style: TextStyle(color: AppColors.textPrimary)),
+            Text(_error ?? 'Unknown error', style: TextStyle(color: AppColors.textPrimary)),
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: _loadPredictiveData,
@@ -212,7 +188,7 @@ class _PredictionsScreenState extends State<PredictionsScreen>
 
   Widget _buildAlertsTab() {
     return Container(
-      color: Colors.grey[50],
+      color: AppColors.background,
       child: RefreshIndicator(
         onRefresh: _loadPredictiveData,
         child: SingleChildScrollView(
@@ -239,8 +215,8 @@ class _PredictionsScreenState extends State<PredictionsScreen>
     int activeAlerts = _alerts.where((a) => a.status == 'ACTIVE').length;
 
     return Card(
-      color: Colors.white,
-      shadowColor: Colors.grey[300],
+      color: AppColors.card,
+      shadowColor: AppColors.border,
       elevation: 2,
       child: Padding(
         padding: EdgeInsets.all(20),
@@ -257,15 +233,15 @@ class _PredictionsScreenState extends State<PredictionsScreen>
                     children: [
                       Text(
                         'Predictive Alerts',
-                        style: GoogleFonts.playfairDisplay(
+                        style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold,
-                          color: Colors.blueGrey,
+                          color: AppColors.textPrimary,
                           fontSize: 20
                         ),
                       ),
                       Text(
                         'ML-powered infrastructure failure predictions',
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(color: AppColors.textSecondary),
                       ),
                     ],
                   ),
@@ -349,9 +325,9 @@ class _PredictionsScreenState extends State<PredictionsScreen>
       children: [
         Text(
           'Alerts by Severity',
-          style: GoogleFonts.playfairDisplay(
+          style: GoogleFonts.inter(
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: AppColors.textPrimary,
             fontSize: 15
           ),
         ),
@@ -371,11 +347,11 @@ class _PredictionsScreenState extends State<PredictionsScreen>
             SizedBox(height: 16),
             Text(
               'No Predictive Alerts',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.black87),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.textPrimary),
             ),
             Text(
               'All systems are operating within normal parameters',
-              style: TextStyle(color: Colors.grey[600]),
+              style: TextStyle(color: AppColors.textSecondary),
             ),
           ],
         ),
@@ -397,8 +373,8 @@ class _PredictionsScreenState extends State<PredictionsScreen>
     IconData alertIcon = _getAlertIcon(alert.alertType);
 
     return Card(
-      color: Colors.white,
-      shadowColor: Colors.grey[300],
+      color: AppColors.card,
+      shadowColor: AppColors.border,
       elevation: 2,
       margin: EdgeInsets.only(bottom: 12),
       child: InkWell(
@@ -426,16 +402,16 @@ class _PredictionsScreenState extends State<PredictionsScreen>
                       children: [
                         Text(
                           alert.title,
-                          style: GoogleFonts.playfairDisplay(
+                          style: GoogleFonts.inter(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: Colors.blueGrey,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                         Text(
                           'Tower ${alert.towerId}',
                           style: TextStyle(
-                            color: Colors.grey[600],
+                            color: AppColors.textSecondary,
                             fontSize: 12,
                           ),
                         ),
@@ -448,18 +424,18 @@ class _PredictionsScreenState extends State<PredictionsScreen>
               SizedBox(height: 12),
               Text(
                 alert.description,
-                style: GoogleFonts.roboto(color: Colors.black87),
+                style: GoogleFonts.roboto(color: AppColors.textPrimary),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
               SizedBox(height: 12),
               Row(
                 children: [
-                  Icon(Icons.schedule, size: 16, color: Colors.grey[600]),
+                  Icon(Icons.schedule, size: 16, color: AppColors.textSecondary),
                   SizedBox(width: 4),
                   Text(
                     'Predicted: ${_formatPredictedTime(alert.predictedTime)}',
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
                   ),
                   Spacer(),
                   Container(
@@ -488,7 +464,7 @@ class _PredictionsScreenState extends State<PredictionsScreen>
 
   Widget _buildMaintenanceTab() {
     return Container(
-      color: Colors.grey[50],
+      color: AppColors.background,
       child: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -510,8 +486,8 @@ class _PredictionsScreenState extends State<PredictionsScreen>
     int estimatedHours = _maintenanceRecommendations.fold(0, (sum, r) => sum + (r['estimatedHours'] as int));
 
     return Card(
-      color: Colors.white,
-      shadowColor: Colors.grey[300],
+      color: AppColors.card,
+      shadowColor: AppColors.border,
       elevation: 2,
       child: Padding(
         padding: EdgeInsets.all(20),
@@ -520,9 +496,9 @@ class _PredictionsScreenState extends State<PredictionsScreen>
           children: [
             Text(
               'Maintenance Overview',
-              style: GoogleFonts.playfairDisplay(
+              style: GoogleFonts.inter(
                 fontWeight: FontWeight.bold,
-                color: Colors.blueGrey,
+                color: AppColors.textPrimary,
                 fontSize: 20
               ),
             ),
@@ -573,9 +549,9 @@ class _PredictionsScreenState extends State<PredictionsScreen>
       children: [
         Text(
           'Maintenance Recommendations',
-          style:GoogleFonts.playfairDisplay(
+          style:GoogleFonts.inter(
             fontWeight: FontWeight.bold,
-            color: Colors.blueGrey,
+            color: AppColors.textPrimary,
             fontSize: 23
           ),
         ),
@@ -596,8 +572,8 @@ class _PredictionsScreenState extends State<PredictionsScreen>
     Color priorityColor = _getPriorityColor(recommendation['priority']);
     
     return Card(
-      color: Colors.white,
-      shadowColor: Colors.grey[300],
+      color: AppColors.card,
+      shadowColor: AppColors.border,
       elevation: 2,
       margin: EdgeInsets.only(bottom: 12),
       child: ExpansionTile(
@@ -612,9 +588,9 @@ class _PredictionsScreenState extends State<PredictionsScreen>
             color: priorityColor,
           ),
         ),
-        title: Text(recommendation['task'], style: TextStyle(color: Colors.black87)),
+        title: Text(recommendation['task'], style: TextStyle(color: AppColors.textPrimary)),
         subtitle: Text('Tower ${recommendation['towerId']} - ${recommendation['urgency']}', 
-                     style: TextStyle(color: Colors.grey[600])),
+                     style: TextStyle(color: AppColors.textSecondary)),
         trailing: Container(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
@@ -632,14 +608,14 @@ class _PredictionsScreenState extends State<PredictionsScreen>
         ),
         children: [
           Container(
-            color: Colors.white,
+            color: AppColors.surface,
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Reasoning:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
-                  Text(recommendation['reasoning'], style: TextStyle(color: Colors.black87)),
+                  Text('Reasoning:', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                  Text(recommendation['reasoning'], style: TextStyle(color: AppColors.textPrimary)),
                   SizedBox(height: 12),
                   Row(
                     children: [
@@ -647,8 +623,8 @@ class _PredictionsScreenState extends State<PredictionsScreen>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Estimated Cost:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
-                            Text('\$${recommendation['estimatedCost']}', style: TextStyle(color: Colors.black87)),
+                            Text('Estimated Cost:', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                            Text('\$${recommendation['estimatedCost']}', style: TextStyle(color: AppColors.textPrimary)),
                           ],
                         ),
                       ),
@@ -656,35 +632,35 @@ class _PredictionsScreenState extends State<PredictionsScreen>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Estimated Hours:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
-                            Text('${recommendation['estimatedHours']}h', style: TextStyle(color: Colors.black87)),
+                            Text('Estimated Hours:', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+                            Text('${recommendation['estimatedHours']}h', style: TextStyle(color: AppColors.textPrimary)),
                           ],
                         ),
                       ),
                     ],
                   ),
                   SizedBox(height: 12),
-                  Text('Required Skills:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
+                  Text('Required Skills:', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                   Wrap(
                     spacing: 8,
                     children: (recommendation['skills'] as List<String>).map((skill) {
                       return Chip(
-                        label: Text(skill, style: TextStyle(fontSize: 12, color: Colors.black87)),
-                        backgroundColor: Colors.white,
+                        label: Text(skill, style: TextStyle(fontSize: 12, color: AppColors.textPrimary)),
+                        backgroundColor: AppColors.surface,
                       );
                     }).toList(),
                   ),
                   SizedBox(height: 12),
                  ElevatedButton(
   style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.white, // Button background color
-    side: BorderSide(color: Colors.black, width: 2), // Button border
+    backgroundColor: AppColors.surface, // Button background color
+    side: BorderSide(color: AppColors.textPrimary, width: 2), // Button border
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8), // Rounded corners
     ),
   ),
   onPressed: () => _scheduleMaintenance(recommendation),
-  child: Text('Schedule Maintenance',style: TextStyle(color: Colors.black),),
+  child: Text('Schedule Maintenance',style: TextStyle(color: AppColors.textPrimary),),
 )
 
                 ],
@@ -722,7 +698,7 @@ class _PredictionsScreenState extends State<PredictionsScreen>
       case 'HIGH': return Colors.orange;
       case 'MEDIUM': return Colors.yellow;
       case 'LOW': return Colors.green;
-      default: return Colors.grey;
+      default: return AppColors.textMuted;
     }
   }
 
@@ -731,7 +707,7 @@ class _PredictionsScreenState extends State<PredictionsScreen>
       case 'HIGH': return Colors.red;
       case 'MEDIUM': return Colors.orange;
       case 'LOW': return Colors.green;
-      default: return Colors.grey;
+      default: return AppColors.textMuted;
     }
   }
 
@@ -781,13 +757,13 @@ class _PredictionsScreenState extends State<PredictionsScreen>
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       builder: (context) => DraggableScrollableSheet(
         initialChildSize: 0.7,
         maxChildSize: 0.9,
         minChildSize: 0.5,
         builder: (context, scrollController) => Container(
-          color: Colors.white,
+          color: AppColors.surface,
           padding: EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -799,12 +775,12 @@ class _PredictionsScreenState extends State<PredictionsScreen>
                   Expanded(
                     child: Text(
                       alert.title,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.black87),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.textPrimary),
                     ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
-                    icon: Icon(Icons.close, color: Colors.black87),
+                    icon: Icon(Icons.close, color: AppColors.textPrimary),
                   ),
                 ],
               ),
@@ -823,16 +799,16 @@ class _PredictionsScreenState extends State<PredictionsScreen>
                       _buildDetailRow('Predicted Time', alert.predictedTime.toString()),
                       _buildDetailRow('Created', alert.createdAt.toString()),
                       SizedBox(height: 16),
-                      Text('Description:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
+                      Text('Description:', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                       SizedBox(height: 8),
-                      Text(alert.description, style: TextStyle(color: Colors.black87)),
+                      Text(alert.description, style: TextStyle(color: AppColors.textPrimary)),
                       SizedBox(height: 16),
-                      Text('Recommended Action:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
+                      Text('Recommended Action:', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                       SizedBox(height: 8),
-                      Text(alert.recommendedAction, style: TextStyle(color: Colors.black87)),
+                      Text(alert.recommendedAction, style: TextStyle(color: AppColors.textPrimary)),
                       SizedBox(height: 16),
                       if (alert.features.isNotEmpty) ...[
-                        Text('ML Features:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
+                        Text('ML Features:', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
                         SizedBox(height: 8),
                         ...alert.features.entries.map((entry) =>
                           _buildDetailRow(entry.key, entry.value.toString())
@@ -877,10 +853,10 @@ class _PredictionsScreenState extends State<PredictionsScreen>
             width: 120,
             child: Text(
               '$label:',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+              style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
             ),
           ),
-          Expanded(child: Text(value, style: TextStyle(color: Colors.black87))),
+          Expanded(child: Text(value, style: TextStyle(color: AppColors.textPrimary))),
         ],
       ),
     );

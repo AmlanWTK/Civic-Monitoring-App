@@ -2,6 +2,7 @@
 // Handles type casting errors and null safety issues
 
 import 'package:flutter/material.dart';
+import '../theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -582,7 +583,7 @@ class _RealTimeTrafficScreenState extends State<RealTimeTrafficScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Real-Time Traffic Monitoring',style: GoogleFonts.playfairDisplay(fontWeight: FontWeight.bold, color: Colors.blueGrey),),
+        title: Text('Real-Time Traffic Monitoring',style: GoogleFonts.inter(fontWeight: FontWeight.bold, color: AppColors.textPrimary),),
         elevation: 0,
         bottom: TabBar(
           controller: _tabController,
@@ -658,7 +659,7 @@ class _RealTimeTrafficScreenState extends State<RealTimeTrafficScreen>
         color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColors.textPrimary.withOpacity(0.1),
             blurRadius: 4,
             offset: Offset(0, 2),
           ),
@@ -1107,9 +1108,9 @@ class _RealTimeTrafficScreenState extends State<RealTimeTrafficScreen>
                 SizedBox(width: 8),
                 Text(
                   'Real-Time Impact Factors',
-                  style: GoogleFonts.playfairDisplay(
+                  style: GoogleFonts.inter(
                     fontWeight: FontWeight.bold,
-                    color: Colors.blueGrey,
+                    color: AppColors.textPrimary,
                     fontSize: 18
                   ),
                 ),
@@ -1190,7 +1191,7 @@ class _RealTimeTrafficScreenState extends State<RealTimeTrafficScreen>
           label,
           style: TextStyle(
             fontSize: 10,
-            color: Colors.grey[600],
+            color: AppColors.textSecondary,
           ),
         ),
       ],
@@ -1214,9 +1215,9 @@ class _RealTimeTrafficScreenState extends State<RealTimeTrafficScreen>
                     children: [
                       Text(
                         'Real-Time Traffic Analytics',
-                        style: GoogleFonts.playfairDisplay(
+                        style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold,
-                          color: Colors.blueGrey,
+                          color: AppColors.textPrimary,
                           fontSize: 20
                         ),
                       ),
@@ -1262,9 +1263,9 @@ class _RealTimeTrafficScreenState extends State<RealTimeTrafficScreen>
       children: [
         Text(
           'Live Traffic Summary',
-          style:GoogleFonts.playfairDisplay(
+          style:GoogleFonts.inter(
             fontWeight: FontWeight.bold,
-            color: Colors.blueGrey,
+            color: AppColors.textPrimary,
             fontSize: 20
           ),
         ),
@@ -1331,8 +1332,8 @@ class _RealTimeTrafficScreenState extends State<RealTimeTrafficScreen>
           children: [
             Text(
               'Real-Time Speed Analysis',
-              style: GoogleFonts.playfairDisplay(
-                color: Colors.blueGrey,
+              style: GoogleFonts.inter(
+                color: AppColors.textPrimary,
                 fontWeight: FontWeight.bold,
                 fontSize: 18
               ),
